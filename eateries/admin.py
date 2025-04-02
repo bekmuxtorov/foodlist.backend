@@ -4,7 +4,7 @@ from . import models
 
 @admin.register(models.Currency)
 class CurrencyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'code', 'created_at', 'updated_at')
+    list_display = ('name', 'id', 'code', 'created_at', 'updated_at')
     search_fields = ('name', 'code')
     list_filter = ('created_at', 'updated_at')
     date_hierarchy = 'created_at'
@@ -14,7 +14,7 @@ class CurrencyAdmin(admin.ModelAdmin):
 
 @admin.register(models.WiFi)
 class WiFiAdmin(admin.ModelAdmin):
-    list_display = ('name', 'password', 'created_at', 'updated_at')
+    list_display = ('name', 'id', 'password', 'created_at', 'updated_at')
     search_fields = ('name', 'password')
     list_filter = ('created_at', 'updated_at')
     date_hierarchy = 'created_at'
@@ -24,7 +24,7 @@ class WiFiAdmin(admin.ModelAdmin):
 
 @admin.register(models.Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone_number', 'created_at', 'updated_at')
+    list_display = ('name', 'id', 'phone_number', 'created_at', 'updated_at')
     search_fields = ('name', 'phone_number')
     list_filter = ('created_at', 'updated_at', 'currency')
     date_hierarchy = 'created_at'
@@ -34,7 +34,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at', 'updated_at')
+    list_display = ('name', 'id', 'created_at', 'updated_at')
     search_fields = ('name',)
     list_filter = ('created_at', 'updated_at')
     date_hierarchy = 'created_at'
@@ -46,6 +46,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'name',
+        'id',
         'price',
         'category',
         'created_at',
