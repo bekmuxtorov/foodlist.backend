@@ -35,7 +35,8 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    "jazzmin",
+    "django.contrib.admin",
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -139,3 +140,11 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Foodlist site admin (DEV)",
+    "site_header": "Foodlist",
+    "site_brand": "Foodlist",
+    "copyright": "bekmuxtorov.group",
+    "welcome_sign": "Foodlist | Site admin.",
+}
