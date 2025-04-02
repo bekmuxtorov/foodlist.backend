@@ -1,2 +1,2 @@
 # foodlist.backend
-Kafe va restoran uchun meyuni online ko'rish va buyurtma berishni tashkillovchi tizim. 
+Online menu viewing and ordering system for cafes and restaurants.
