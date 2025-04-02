@@ -34,6 +34,10 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 # Application definition
 
+LOCAL_APPS = [
+    "eateries",
+]
+
 INSTALLED_APPS = [
     "jazzmin",
     "django.contrib.admin",
@@ -42,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+] + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
