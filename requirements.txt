@@ -2,4 +2,5 @@ Django==4.2
 environs==9.5.0
 django-jazzmin==3.0.1
 djangorestframework==4.5.0
-drf-yasg==4.5.0
+drf-yasg==1.21.7
+django-filter==23.2
