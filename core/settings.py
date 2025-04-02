@@ -39,7 +39,14 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = [
+    # admin panel
     "jazzmin",
+
+    # api
+    "rest_framework",
+    "drf_yasg",
+
+    # default
     "django.contrib.admin",
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,7 +139,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'static'
 
@@ -151,4 +157,10 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Foodlist",
     "copyright": "bekmuxtorov.group",
     "welcome_sign": "Foodlist | Site admin.",
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }
