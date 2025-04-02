@@ -16,7 +16,7 @@ class Currency(BaseModel):
         verbose_name='Name'
     )
     code = models.CharField(
-        max_length=3,
+        max_length=8,
         verbose_name='Code'
     )
 
@@ -38,7 +38,7 @@ class WiFi(BaseModel):
         verbose_name='Password'
     )
     qr_code = models.ImageField(
-        upload_to="media/qr_codes/",
+        upload_to="qr_codes/",
         verbose_name='QR code',
         blank=True,
         null=True
@@ -58,7 +58,7 @@ class Organization(BaseModel):
         verbose_name='Name'
     )
     logo = models.ImageField(
-        upload_to="media/logos/",
+        upload_to="logos/",
         verbose_name='Logo',
         blank=True,
         null=True
@@ -91,12 +91,12 @@ class Organization(BaseModel):
         to=WiFi,
         on_delete=models.CASCADE,
         verbose_name='Wi-Fi password',
-        related_name='wifi_password',
+        related_name='organizations',
         blank=True,
         null=True
     )
     wallpaper = models.ImageField(
-        upload_to="media/wallpapers/",
+        upload_to="wallpapers/",
         verbose_name='Wallpaper',
         blank=True,
         null=True
@@ -126,7 +126,7 @@ class Category(BaseModel):
         verbose_name='Name'
     )
     image = models.ImageField(
-        upload_to="media/categories/",
+        upload_to="categories/",
         verbose_name='Image',
         blank=True,
         null=True
@@ -169,7 +169,7 @@ class Product(BaseModel):
         verbose_name='Price'
     )
     image = models.ImageField(
-        upload_to="media/products/",
+        upload_to="products/",
         verbose_name='Image',
         blank=True,
         null=True
