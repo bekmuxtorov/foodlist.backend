@@ -95,10 +95,6 @@ urlpatterns = [
 
     # Table
     path(
-        "tables/create/",
-        TableCreateAPIView.as_view()
-    ),
-    path(
         "tables/create_collection/",
         TableCreateCollectionAPIView.as_view()
     ),

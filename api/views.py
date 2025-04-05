@@ -131,12 +131,6 @@ class ProductDestroyAPIView(DestroyAPIView):
 
 
 # < ========= Table ========= >
-class TableCreateAPIView(CreateAPIView):
-    serializer_class = TableSerializer
-    queryset = Table.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
-
-
 class TableCreateCollectionAPIView(APIView):
     @table_create_schema
     def post(self, request):
