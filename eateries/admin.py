@@ -62,3 +62,11 @@ class ProductAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(models.Table)
+class TableAdmin(admin.ModelAdmin):
+    list_display = ('number', 'id', 'organization', 'created_at', 'updated_at')
+    search_fields = ('number', 'organization')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at')

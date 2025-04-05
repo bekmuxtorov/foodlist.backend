@@ -189,6 +189,32 @@ class Product(BaseModel):
         verbose_name_plural = 'Products'
 
 
+class Table(BaseModel):
+    organization = models.ForeignKey(
+        to=Organization,
+        on_delete=models.CASCADE,
+        verbose_name='Organization',
+        related_name='tables'
+    )
+    number = models.CharField(
+        max_length=255,
+        verbose_name='Number'
+    )
+    qr_code = models.ImageField(
+        upload_to="qr_codes/",
+        verbose_name='QR code',
+        blank=True,
+        null=True
+    )
+
+    def __str__(self) -> str:
+        return self.number
+
+    class Meta:
+        verbose_name = 'Table'
+        verbose_name_plural = 'Tables'
+
+
 """
 	- Kategoriya
 	[
