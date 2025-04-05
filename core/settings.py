@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from corsheaders.defaults import default_headers
-from corsheaders.defaults import default_methods
 from pathlib import Path
 from environs import Env
 
@@ -181,5 +179,6 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_METHODS = list(default_methods)
-CORS_ALLOW_HEADERS = list(default_headers)
+CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT')
+CORS_ALLOW_HEADERS = ('accept', 'authorization', 'content-type',
+                      'user-agent', 'x-csrftoken', 'x-requested-with')
