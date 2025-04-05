@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.contrib import admin
 from django.urls import path, include
 
@@ -17,7 +18,13 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+
+def default_page(request):
+    return render(request, "index.html")
+
+
 urlpatterns = [
+    path("", default_page),
     path("admin3/", admin.site.urls),
     path("swagger/", schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
