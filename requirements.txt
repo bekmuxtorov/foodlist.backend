@@ -6,3 +6,4 @@ drf-yasg==1.21.7
 django-filter==23.2
 Pillow==9.5.0
 django-cors-headers==4.2.0
+qrcode==8.1

@@ -1,21 +1,25 @@
-from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from django_filters import rest_framework as filters
 
+from .utils import create_qr_code_for_tables, safe_filename
+from .swagger_docs import table_create_schema
 from api.serializers import (
     CurrencySerializer,
     WiFiSerializer,
     OrganizationSerializer,
     CategorySerializer,
-    ProductSerializer
+    ProductSerializer,
+    TableSerializer,
 )
 from eateries.models import (
     Currency,
     WiFi,
     Organization,
     Category,
-    Product
+    Product,
+    Table,
 )
 
 
@@ -123,3 +127,90 @@ class ProductUpdateAPIView(UpdateAPIView):
 class ProductDestroyAPIView(DestroyAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+
+
+# < ========= Table ========= >
+class TableCreateAPIView(CreateAPIView):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class TableCreateCollectionAPIView(APIView):
+    @table_create_schema
+    def post(self, request):
+        table_count = request.data.get("table_count")
+        organization_id = request.data.get("organization_id")
+
+        if not organization_id:
+            return Response({"error": "organization_id is required"}, status=400)
+
+        organization = Organization.objects.filter(id=organization_id).first()
+        if not organization:
+            return Response({"error": "Organization not found"}, status=404)
+
+        if not table_count:
+            return Response({"error": "table_count is required"}, status=400)
+
+        if not str(table_count).isdigit():
+            return Response({"error": "table_count must be an integer"}, status=400)
+
+        short_name = safe_filename(
+            organization.short_name or f"org_{organization.id}")
+        created_tables = []
+
+        for table_number in range(1, int(table_count) + 1):
+            table, created = Table.objects.get_or_create(
+                organization=organization,
+                number=table_number
+            )
+
+            qr_code_path = create_qr_code_for_tables(
+                short_name, str(table_number))
+            table.qr_code = qr_code_path
+            table.save()
+
+            created_tables.append({
+                "id": table.id,
+                "number": table.number,
+                "qr_code": request.build_absolute_uri(table.qr_code.url)
+                if hasattr(table.qr_code, 'url') else table.qr_code
+            })
+
+        return Response({
+            "tables": created_tables
+        },
+            status=200
+        )
+
+    def get_queryset(self):
+        return Table.objects.all()
+
+
+class TableListAPIView(ListAPIView):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    filterset_fields = ("organization",)
+    search_fields = ("number",)
+
+
+class TableDetailAPIView(RetrieveAPIView):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class TableUpdateAPIView(UpdateAPIView):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
+
+class TableDestroyAPIView(DestroyAPIView):
+    serializer_class = TableSerializer
+    queryset = Table.objects.all()

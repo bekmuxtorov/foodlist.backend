@@ -4,7 +4,8 @@ from eateries.models import (
     WiFi,
     Organization,
     Category,
-    Product
+    Product,
+    Table,
 )
 
 
@@ -40,3 +41,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
+
+
+class TableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Table
+        fields = "__all__"
+        read_only_fields = ["qr_code"]

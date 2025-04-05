@@ -14,7 +14,13 @@ from api.views import (
     ProductListAPIView,
     ProductDetailAPIView,
     ProductUpdateAPIView,
-    ProductDestroyAPIView
+    ProductDestroyAPIView,
+    TableCreateAPIView,
+    TableListAPIView,
+    TableDetailAPIView,
+    TableUpdateAPIView,
+    TableDestroyAPIView,
+    TableCreateCollectionAPIView,
 )
 
 urlpatterns = [
@@ -85,5 +91,31 @@ urlpatterns = [
     path(
         "products/delete/<int:pk>/",
         ProductDestroyAPIView.as_view()
+    ),
+
+    # Table
+    path(
+        "tables/create/",
+        TableCreateAPIView.as_view()
+    ),
+    path(
+        "tables/create_collection/",
+        TableCreateCollectionAPIView.as_view()
+    ),
+    path(
+        "tables/",
+        TableListAPIView.as_view()
+    ),
+    path(
+        "tables/<int:pk>/",
+        TableDetailAPIView.as_view()
+    ),
+    path(
+        "tables/update/<int:pk>/",
+        TableUpdateAPIView.as_view()
+    ),
+    path(
+        "tables/delete/<int:pk>/",
+        TableDestroyAPIView.as_view()
     ),
 ]
