@@ -48,3 +48,8 @@ class TableSerializer(serializers.ModelSerializer):
         model = Table
         fields = "__all__"
         read_only_fields = ["qr_code"]
+
+
+class TableCreateCollectionSerializer(serializers.Serializer):
+    organization_id = serializers.IntegerField(required=True)
+    table_count = serializers.IntegerField(min_value=1, required=True)

@@ -12,6 +12,7 @@ from api.serializers import (
     CategorySerializer,
     ProductSerializer,
     TableSerializer,
+    TableCreateCollectionSerializer,
 )
 from eateries.models import (
     Currency,
@@ -139,28 +140,23 @@ class TableCreateAPIView(CreateAPIView):
 class TableCreateCollectionAPIView(APIView):
     @table_create_schema
     def post(self, request):
-        table_count = request.data.get("table_count")
-        organization_id = request.data.get("organization_id")
+        serializer = TableCreateCollectionSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
 
-        if not organization_id:
-            return Response({"error": "organization_id is required"}, status=400)
+        organization_id = serializer.validated_data['organization_id']
+        table_count = serializer.validated_data['table_count']
 
         organization = Organization.objects.filter(id=organization_id).first()
         if not organization:
             return Response({"error": "Organization not found"}, status=404)
-
-        if not table_count:
-            return Response({"error": "table_count is required"}, status=400)
-
-        if not str(table_count).isdigit():
-            return Response({"error": "table_count must be an integer"}, status=400)
 
         short_name = safe_filename(
             organization.short_name or f"org_{organization.id}")
         created_tables = []
 
         for table_number in range(1, int(table_count) + 1):
-            table, created = Table.objects.get_or_create(
+            table, _ = Table.objects.get_or_create(
                 organization=organization,
                 number=table_number
             )
