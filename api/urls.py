@@ -15,7 +15,6 @@ from api.views import (
     ProductDetailAPIView,
     ProductUpdateAPIView,
     ProductDestroyAPIView,
-    TableCreateAPIView,
     TableListAPIView,
     TableDetailAPIView,
     TableUpdateAPIView,
