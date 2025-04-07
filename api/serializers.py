@@ -26,6 +26,10 @@ class WiFiSerializer(serializers.ModelSerializer):
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    currency_detail = CurrencySerializer(source='currency', read_only=True)
+    wifi_password_detail = WiFiSerializer(
+        source='wifi_password', read_only=True)
+
     class Meta:
         model = Organization
         fields = "__all__"
