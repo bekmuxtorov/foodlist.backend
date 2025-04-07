@@ -8,6 +8,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from api.views import TableInOrganization
+
 schema_view = get_schema_view(
     openapi.Info(
         title="foodlist.menu API",
@@ -27,6 +29,10 @@ def default_page(request):
 
 urlpatterns = [
     path("", default_page),
+    path(
+        "<str:short_name>/<int:table_number>/",
+        TableInOrganization.as_view(),
+    ),
     path("admin3/", admin.site.urls),
     path("swagger/", schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),

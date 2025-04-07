@@ -204,3 +204,42 @@ class TableUpdateAPIView(UpdateAPIView):
 class TableDestroyAPIView(DestroyAPIView):
     serializer_class = TableSerializer
     queryset = Table.objects.all()
+
+
+class TableInOrganization(APIView):
+    def get_queryset(self):
+        return Organization.objects.all()
+
+    def get(self, request, short_name, table_number):
+        organization = self.get_queryset().filter(
+            short_name=short_name
+        ).first()
+        if not organization:
+            return Response({"error": "Organization not found"}, status=404)
+        organization_serializer = OrganizationSerializer(
+            organization, context={"request": request})
+
+
+        table = organization.tables.filter(
+            number=table_number
+        ).first()
+        if not table:
+            return Response({"error": "Table not found"}, status=404)
+        table_serializer = TableSerializer(table, context={"request": request})
+
+        products = table.organization.products.filter(
+            is_active=True
+        ).order_by("category__name")
+        product_serializer = ProductSerializer(
+            instance=products,
+            many=True,
+            context={"request": request}
+        )
+
+        return Response(
+            {
+                "organization": organization_serializer.data,
+                "table": table_serializer.data,
+                "products": product_serializer.data
+            }
+        )
