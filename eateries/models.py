@@ -180,6 +180,10 @@ class Product(BaseModel):
         verbose_name='Category',
         related_name='products'
     )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='Is active'
+    )
 
     def __str__(self) -> str:
         return " | ".join([self.name, str(self.price)])
