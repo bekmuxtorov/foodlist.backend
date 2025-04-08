@@ -70,3 +70,17 @@ class TableAdmin(admin.ModelAdmin):
     search_fields = ('number', 'organization')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(models.Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = (
+        "organization",
+        "table",
+        "status",
+        "total_price"
+    )
+    search_fields = ("organization__short_name", "table__number")
+    ordering = ('-created_at',)
+    list_filter = ("organization__short_name", "table__number", "status")
+    readonly_fields = ('created_at', 'updated_at')

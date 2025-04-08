@@ -20,6 +20,11 @@ from api.views import (
     TableUpdateAPIView,
     TableDestroyAPIView,
     TableCreateCollectionAPIView,
+    OrderCreateAPIView,
+    OrderListAPIView,
+    OrderDetailAPIView,
+    OrderDestroyAPIView,
+    OrderUpdateAPIView
 )
 
 urlpatterns = [
@@ -112,5 +117,27 @@ urlpatterns = [
     path(
         "tables/delete/<int:pk>/",
         TableDestroyAPIView.as_view()
+    ),
+
+    # Order
+    path(
+        "orders/create/",
+        OrderCreateAPIView.as_view()
+    ),
+    path(
+        "orders/",
+        OrderListAPIView.as_view()
+    ),
+    path(
+        "orders/<int:pk>/",
+        OrderDetailAPIView.as_view()
+    ),
+    path(
+        "orders/update/<int:pk>/",
+        OrderUpdateAPIView.as_view()
+    ),
+    path(
+        "orders/delete/<int:pk>/",
+        OrderDestroyAPIView.as_view()
     ),
 ]

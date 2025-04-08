@@ -13,6 +13,7 @@ from api.serializers import (
     ProductSerializer,
     TableSerializer,
     TableCreateCollectionSerializer,
+    OrderSerializer,
 )
 from eateries.models import (
     Currency,
@@ -21,6 +22,7 @@ from eateries.models import (
     Category,
     Product,
     Table,
+    Order,
 )
 
 
@@ -244,3 +246,39 @@ class TableInOrganization(APIView):
                 "products": product_serializer.data
             }
         )
+
+
+# < ========= Order ========= >
+class OrderCreateAPIView(CreateAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class OrderListAPIView(ListAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    filterset_fields = ("organization", "table", "status")
+    search_fields = ("organization__short_name", "table__number")
+
+
+class OrderDetailAPIView(RetrieveAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+
+class OrderUpdateAPIView(UpdateAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
+
+class OrderDestroyAPIView(DestroyAPIView):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()

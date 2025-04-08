@@ -219,35 +219,50 @@ class Table(BaseModel):
         verbose_name_plural = 'Tables'
 
 
+class Order(BaseModel):
+    organization = models.ForeignKey(
+        to=Organization,
+        verbose_name="Organization",
+        related_name="orders",
+        on_delete=models.CASCADE,
+    )
+    table = models.ForeignKey(
+        to=Table,
+        verbose_name="Table",
+        related_name="orders",
+        on_delete=models.CASCADE,
+    )
+    status = models.CharField(
+        max_length=255,
+        verbose_name='Status',
+        choices=[
+            ('waiting', 'Waiting'),
+            ('ready', 'Ready'),
+            ('delivered', 'Delivered')
+        ],
+        default='waiting'
+    )
+    products = models.ManyToManyField(
+        to=Product,
+        verbose_name='Products',
+        related_name='orders'
+    )
+
+    total_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Total price'
+    )
+
+    def __str__(self):
+        return " | ".join([self.organization.short_name, self.table.number])
+
+    class Meta:
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
+
+
 """
-	- Kategoriya
-	[
-		- nomi
-		- rasmi
-	]
-
-	- Mahsulot
-	[
-		- status(qoldi/qomadi)
-		- nomi
-		- description
-		- Og'irlik(g)(r)
-		- narxi
-		- rasm[bir nechta(max 3ta)]
-		- kategoriya[FK Kategoriya]
-		// - Chegirma(Boolean)
-		   - Chegirma turi[Yo'q, Foiz, sovg'a]
-			- chegirma_foizi(int)
-			- sovga(FK Mahsulot)
-		- during_time
-	]
-
-	- Stollar
-		- nomeri
-		- qr_code(rasm)
-		 // - o'rindiqlar soni
-		-
-
 	Buyurtmalar
 		- stol nomer
 		- status[kutulmoqda, tayyorlandi, yetkizildi]
@@ -255,6 +270,5 @@ class Table(BaseModel):
 		- taomlar[ManyToMany]
 		- narxi
 		// - loyality(phone_number)
-
 
 """

@@ -6,6 +6,7 @@ from eateries.models import (
     Category,
     Product,
     Table,
+    Order,
 )
 
 
@@ -57,3 +58,9 @@ class TableSerializer(serializers.ModelSerializer):
 class TableCreateCollectionSerializer(serializers.Serializer):
     organization_id = serializers.IntegerField(required=True)
     table_count = serializers.IntegerField(min_value=1, required=True)
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
