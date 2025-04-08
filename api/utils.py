@@ -11,9 +11,9 @@ def safe_filename(value: str) -> str:
 
 def create_qr_code_for_tables(organization_name: str, number: str):
     if settings.DEBUG:
-        qr_data = f"http://localhost:8000/{organization_name}/{number}/"
+        qr_data = f"http://localhost:8000/{organization_name}?t={number}/"
     else:
-        qr_data = f"https://foodlistback.pythonanywhere.com/{organization_name}/{number}/"
+        qr_data = f"https://foodlistback.pythonanywhere.com/{organization_name}?t={number}/"
 
     qr_img = qrcode.make(qr_data)
 

@@ -4,7 +4,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, D
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from .utils import create_qr_code_for_tables, safe_filename
-from .swagger_docs import table_create_schema
+from .swagger_docs import table_create_schema, table_in_organization
 from api.serializers import (
     CurrencySerializer,
     WiFiSerializer,
@@ -210,7 +210,9 @@ class TableInOrganization(APIView):
     def get_queryset(self):
         return Organization.objects.all()
 
-    def get(self, request, short_name, table_number):
+    @table_in_organization
+    def get(self, request, short_name):
+        table_number = request.GET.get('t')
         organization = self.get_queryset().filter(
             short_name=short_name
         ).first()
@@ -218,7 +220,6 @@ class TableInOrganization(APIView):
             return Response({"error": "Organization not found"}, status=404)
         organization_serializer = OrganizationSerializer(
             organization, context={"request": request})
-
 
         table = organization.tables.filter(
             number=table_number

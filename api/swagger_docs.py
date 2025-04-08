@@ -13,6 +13,14 @@ table_create_schema = swagger_auto_schema(
         },
         required=['organization_id', 'table_count']
     ),
+    manual_parameters=[
+        openapi.Parameter(
+            'table_number',
+            openapi.IN_QUERY,
+            description="Stol raqami",
+            type=openapi.TYPE_INTEGER
+        )
+    ],
     responses={
         200: openapi.Response(
             description="Tables created successfully",
@@ -30,4 +38,15 @@ table_create_schema = swagger_auto_schema(
         400: openapi.Response(description="Invalid data"),
         404: openapi.Response(description="Organization not found"),
     }
+)
+
+table_in_organization = swagger_auto_schema(
+    manual_parameters=[
+        openapi.Parameter(
+            't',
+            openapi.IN_QUERY,
+            description="Stol raqami",
+            type=openapi.TYPE_INTEGER
+        )
+    ]
 )
