@@ -282,3 +282,21 @@ class OrderUpdateAPIView(UpdateAPIView):
 class OrderDestroyAPIView(DestroyAPIView):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+
+
+class OrganizationCategoryListAPIView(APIView):
+    def get_queryset(self):
+        return Category.objects.all()
+
+    def get(self, request, pk):
+        organization = Organization.objects.filter(id=pk).first()
+        if not organization:
+            return Response({"error": "Organization not found"}, status=404)
+
+        categories = Category.objects.filter(
+            products__organization=organization
+        ).distinct()
+        serializer = CategorySerializer(
+            categories, many=True, context={"request": request}
+        )
+        return Response(serializer.data)

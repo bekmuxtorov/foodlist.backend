@@ -24,7 +24,8 @@ from api.views import (
     OrderListAPIView,
     OrderDetailAPIView,
     OrderDestroyAPIView,
-    OrderUpdateAPIView
+    OrderUpdateAPIView,
+    OrganizationCategoryListAPIView,
 )
 
 urlpatterns = [
@@ -63,6 +64,10 @@ urlpatterns = [
     path(
         "organizations/update/<int:pk>/",
         OrganizationUpdateAPIView.as_view()
+    ),
+    path(
+        "organizations/<int:pk>/categories/",
+        OrganizationCategoryListAPIView.as_view()
     ),
 
     # Category
