@@ -226,6 +226,15 @@ class Order(BaseModel):
         related_name="orders",
         on_delete=models.CASCADE,
     )
+    type = models.CharField(
+        verbose_name="Type",
+        max_length=10,
+        choices=[
+            ('on_table', 'Dine in'),
+            ('take_away', 'Take away'),
+        ],
+        default='on_table'
+    )
     table = models.ForeignKey(
         to=Table,
         verbose_name="Table",
