@@ -3,7 +3,7 @@ environs==9.5.0
 django-jazzmin==3.0.1
 djangorestframework==3.14.0
 drf-yasg==1.21.7
-django-filter==23.2
+django-filter==25.1
 Pillow==9.5.0
 django-cors-headers==4.2.0
 qrcode==8.1
