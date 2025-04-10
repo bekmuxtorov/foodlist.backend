@@ -81,6 +81,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'total_price',
             'organization',
             'table',
-            'products',     
+            'type',
+            'products',
             'product_ids'
         )

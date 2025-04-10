@@ -170,6 +170,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
     ),
+
 }
 
 # CORS_ALLOWED_ORIGINS = [

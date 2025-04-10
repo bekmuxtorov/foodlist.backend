@@ -259,7 +259,7 @@ class OrderListAPIView(ListAPIView):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
     parser_classes = (MultiPartParser, FormParser)
-    filterset_fields = ("organization", "table", "status")
+    filterset_fields = ("organization", "table", "status", "type")
     search_fields = ("organization__short_name", "table__number")
 
 
