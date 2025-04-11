@@ -156,13 +156,6 @@ class Product(BaseModel):
         blank=True,
         null=True
     )
-    weight = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name='Weight',
-        blank=True,
-        null=True
-    )
     weight_text = models.CharField(
         verbose_name="Weight text",
         max_length=128,
