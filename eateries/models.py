@@ -156,7 +156,7 @@ class Product(BaseModel):
         blank=True,
         null=True
     )
-    weight_text = models.CharField(
+    weight = models.CharField(
         verbose_name="Weight text",
         max_length=128,
         blank=True,
