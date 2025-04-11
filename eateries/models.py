@@ -270,13 +270,20 @@ class Order(BaseModel):
         verbose_name_plural = 'Orders'
 
 
-"""
-	Buyurtmalar
-		- stol nomer
-		- status[kutulmoqda, tayyorlandi, yetkizildi]
-		- vaqti
-		- taomlar[ManyToMany]
-		- narxi
-		// - loyality(phone_number)
+class ProductImage(BaseModel):
+    product = models.ForeignKey(
+        to=Product,
+        on_delete=models.CASCADE,
+        verbose_name='Product',
+        related_name='images'
+    )
+    image = models.ImageField(
+        upload_to="images/",
+        verbose_name='Image',
+        blank=True,
+        null=True
+    )
 
-"""
+    class Meta:
+        verbose_name = 'Image'
+        verbose_name_plural = 'Images'

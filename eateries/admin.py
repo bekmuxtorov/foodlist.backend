@@ -42,6 +42,12 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+class ProductImageInline(admin.TabularInline):
+    model = models.ProductImage
+    extra = 1
+    fields = ('image',)
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
@@ -62,6 +68,7 @@ class ProductAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+    inlines = [ProductImageInline]
 
 
 @admin.register(models.Table)
