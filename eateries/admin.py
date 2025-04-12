@@ -1,3 +1,5 @@
+from django import forms
+from django.contrib.auth.hashers import make_password
 from django.contrib import admin
 from . import models
 
@@ -97,3 +99,27 @@ class OrderAdmin(admin.ModelAdmin):
         "type"
     )
     readonly_fields = ('created_at', 'updated_at')
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = models.UserProfile
+        fields = '__all__'
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password:
+            return make_password(password)
+        return password
+
+
+@admin.register(models.UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    form = UserProfileForm
+    list_display = ('full_name', 'id', 'phone_number',
+                    'created_at', 'updated_at')
+    search_fields = ('full_name', 'phone_number')
+    list_filter = ('created_at', 'updated_at', 'type')
+    date_hierarchy = 'created_at'
+    ordering = ('-created_at',)
+    readonly_fields = ('password', 'created_at', 'updated_at')

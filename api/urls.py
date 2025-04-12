@@ -26,6 +26,8 @@ from api.views import (
     OrderDestroyAPIView,
     OrderUpdateAPIView,
     OrganizationCategoryListAPIView,
+    UserCreateAPIView,
+    UserDetailAPIView,
 )
 
 urlpatterns = [
@@ -145,4 +147,14 @@ urlpatterns = [
         "orders/delete/<int:pk>/",
         OrderDestroyAPIView.as_view()
     ),
+
+    # User
+    path(
+        "users/create/",
+        UserCreateAPIView.as_view()
+    ),
+    path(
+        "users/<int:pk>/",
+        UserDetailAPIView.as_view()
+    )
 ]

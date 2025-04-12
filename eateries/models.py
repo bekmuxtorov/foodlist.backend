@@ -1,5 +1,8 @@
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.core.validators import RegexValidator
+
+from .managers import UserManager
 
 
 class BaseModel(models.Model):
@@ -8,6 +11,74 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class UserProfile(BaseModel):
+    USER_TYPES = [
+        ('manager', 'Meneger'),
+        ('customer', 'Mijoz'),
+    ]
+    type = models.CharField(
+        max_length=10,
+        choices=USER_TYPES,
+        default='customer'
+    )
+    full_name = models.CharField(
+        verbose_name="Full name",
+        max_length=255,
+        blank=True,
+        null=True,
+    )
+    phone_number = models.CharField(
+        max_length=13,
+        verbose_name='Phone number',
+        validators=[
+            RegexValidator(
+                regex=r'^\+?\d{1,4}[\s-]?\(?\d{1,4}\)?[\s-]?\d{1,12}([\s-]?\d{1,12})?$',
+                message=(
+                    "Invalid phone number."
+                )
+            ),
+        ],
+        unique=True
+    )
+    telegram_id = models.CharField(
+        max_length=20,
+        verbose_name='Telegram ID',
+        blank=True,
+        null=True
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name='Is active'
+    )
+    sms_code = models.CharField(
+        max_length=6,
+        verbose_name='SMS code',
+        blank=True,
+        null=True
+    )
+    password = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
+    def __str__(self) -> str:
+        return " | ".join([self.full_name, self.phone_number])
+
+    objects = UserManager()
+
+    class Meta:
+        verbose_name = 'User profile'
+        verbose_name_plural = 'User profiles'
+        ordering = ['-created_at']
 
 
 class Currency(BaseModel):
@@ -53,6 +124,12 @@ class WiFi(BaseModel):
 
 
 class Organization(BaseModel):
+    user = models.ForeignKey(
+        to=UserProfile,
+        on_delete=models.CASCADE,
+        verbose_name='User',
+        related_name='organizations'
+    )
     name = models.CharField(
         max_length=255,
         verbose_name='Name'
@@ -219,6 +296,12 @@ class Table(BaseModel):
 
 
 class Order(BaseModel):
+    user = models.ForeignKey(
+        to=UserProfile,
+        verbose_name='User',
+        related_name='orders',
+        on_delete=models.CASCADE,
+    )
     organization = models.ForeignKey(
         to=Organization,
         verbose_name="Organization",

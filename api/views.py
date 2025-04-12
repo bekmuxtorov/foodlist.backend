@@ -14,6 +14,8 @@ from api.serializers import (
     TableSerializer,
     TableCreateCollectionSerializer,
     OrderSerializer,
+    OrderCreateSerializer,
+    UserCreateSerializer,
 )
 from eateries.models import (
     Currency,
@@ -23,6 +25,7 @@ from eateries.models import (
     Product,
     Table,
     Order,
+    UserProfile,
 )
 
 
@@ -250,8 +253,8 @@ class TableInOrganization(APIView):
 
 # < ========= Order ========= >
 class OrderCreateAPIView(CreateAPIView):
-    serializer_class = OrderSerializer
     queryset = Order.objects.all()
+    serializer_class = OrderCreateSerializer
     parser_classes = (MultiPartParser, FormParser)
 
 
@@ -300,3 +303,13 @@ class OrganizationCategoryListAPIView(APIView):
             categories, many=True, context={"request": request}
         )
         return Response(serializer.data)
+
+
+class UserCreateAPIView(CreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserCreateSerializer
+
+
+class UserDetailAPIView(RetrieveAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserCreateSerializer
