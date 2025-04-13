@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
@@ -256,6 +257,7 @@ class OrderCreateAPIView(CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderCreateSerializer
     parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [AllowAny]
 
 
 class OrderListAPIView(ListAPIView):
@@ -308,6 +310,7 @@ class OrganizationCategoryListAPIView(APIView):
 class UserCreateAPIView(CreateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
 
 
 class UserDetailAPIView(RetrieveAPIView):
