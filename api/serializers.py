@@ -9,6 +9,7 @@ from eateries.models import (
     Order,
     ProductImage,
     UserProfile,
+    OrderProduct,
 )
 
 
@@ -71,9 +72,15 @@ class TableCreateCollectionSerializer(serializers.Serializer):
     table_count = serializers.IntegerField(min_value=1, required=True)
 
 
+class ProductItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField(help_text="Mahsulot ID")
+    quantity = serializers.IntegerField(
+        min_value=1, help_text="Mahsulot miqdori")
+
+
 class OrderCreateSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
-    product_ids = serializers.CharField(write_only=True)
+    product_items = ProductItemSerializer(many=True, write_only=True)
     table = serializers.IntegerField(write_only=True)
 
     class Meta:
@@ -89,21 +96,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             'table',
             'type',
             'products',
-            'product_ids'
+            'product_items',  # YANGI MAYDON
         )
-
-    def validate_product_ids(self, value):
-        try:
-            ids = [int(i.strip())
-                   for i in value.split(',') if i.strip().isdigit()]
-            products = Product.objects.filter(id__in=ids)
-            if not products.exists():
-                raise serializers.ValidationError(
-                    "Hech qanday mahsulot topilmadi.")
-            return products
-        except Exception:
-            raise serializers.ValidationError(
-                "Mahsulotlar ro‘yxatini noto‘g‘ri formatda yubordingiz.")
 
     def validate_table(self, value):
         organization = self.initial_data.get("organization")
@@ -115,14 +109,27 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             return Table.objects.get(number=value, organization=organization)
         except Table.DoesNotExist:
             raise serializers.ValidationError(
-                f"{value} raqamli stol topilmadi yoki ushbu organizationga tegishli emas.")
+                f"{value} raqamli stol topilmadi yoki ushbu organizationga tegishli emas."
+            )
 
     def create(self, validated_data):
-        products = validated_data.pop('product_ids')   # queryset
-        table_obj = validated_data.pop(
-            'table')         # bu endi Table instance
+        product_items = validated_data.pop('product_items')  # List of dicts
+        table_obj = validated_data.pop('table')
         order = Order.objects.create(table=table_obj, **validated_data)
-        order.products.set(products)
+
+        # OrderProduct yaratish
+        for item in product_items:
+            try:
+                product = Product.objects.get(id=item['id'])
+                OrderProduct.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=item['quantity']
+                )
+            except Product.DoesNotExist:
+                raise serializers.ValidationError(
+                    f"Mahsulot ID {item['id']} topilmadi.")
+
         return order
 
 
