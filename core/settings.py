@@ -177,7 +177,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://osonmenyu.uz",
-    "https://foodlistback.pythonanywhere.com/"
+    "https://foodlistback.pythonanywhere.com"
 ]
 
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT')
