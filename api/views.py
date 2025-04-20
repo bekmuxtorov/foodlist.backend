@@ -14,7 +14,6 @@ from api.serializers import (
     ProductSerializer,
     TableSerializer,
     TableCreateCollectionSerializer,
-    OrderSerializer,
     OrderCreateSerializer,
     UserCreateSerializer,
 )
@@ -256,28 +255,25 @@ class TableInOrganization(APIView):
 class OrderCreateAPIView(CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderCreateSerializer
-    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [AllowAny]
 
 
 class OrderListAPIView(ListAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     queryset = Order.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
-    filterset_fields = ("organization", "table", "status", "type")
+    filterset_fields = ("organization", "table", "status", "type", "user")
     search_fields = ("organization__short_name", "table__number")
 
 
 class OrderDetailAPIView(RetrieveAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     queryset = Order.objects.all()
     parser_classes = (MultiPartParser, FormParser)
 
 
 class OrderUpdateAPIView(UpdateAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     queryset = Order.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
@@ -285,7 +281,7 @@ class OrderUpdateAPIView(UpdateAPIView):
 
 
 class OrderDestroyAPIView(DestroyAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     queryset = Order.objects.all()
 
 

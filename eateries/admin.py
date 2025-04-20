@@ -81,6 +81,11 @@ class TableAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+class ProductOrder(admin.TabularInline):
+    model = models.ProductOrder
+    extra = 1
+
+
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
@@ -99,6 +104,7 @@ class OrderAdmin(admin.ModelAdmin):
         "type"
     )
     readonly_fields = ('created_at', 'updated_at')
+    inlines = [ProductOrder]
 
 
 class UserProfileForm(forms.ModelForm):

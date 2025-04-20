@@ -295,6 +295,32 @@ class Table(BaseModel):
         verbose_name_plural = 'Tables'
 
 
+class ProductOrder(BaseModel):
+    order = models.ForeignKey(
+        to='Order',
+        on_delete=models.CASCADE,
+        verbose_name='Order',
+        related_name='product_orders'
+    )
+    product = models.ForeignKey(
+        to=Product,
+        on_delete=models.CASCADE,
+        verbose_name='Product',
+        related_name='product_orders'
+    )
+    quantity = models.PositiveIntegerField(
+        verbose_name='Quantity'
+    )
+
+    def __str__(self) -> str:
+        return " | ".join([self.product.name, str(self.quantity)])
+
+    class Meta:
+        unique_together = ('order', 'product')
+        verbose_name = 'Product order'
+        verbose_name_plural = 'Product orders'
+
+
 class Order(BaseModel):
     user = models.ForeignKey(
         to=UserProfile,
@@ -351,7 +377,7 @@ class Order(BaseModel):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
-
+    
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(

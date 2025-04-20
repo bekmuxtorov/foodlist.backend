@@ -9,6 +9,7 @@ from eateries.models import (
     Order,
     ProductImage,
     UserProfile,
+    ProductOrder,
 )
 
 
@@ -71,10 +72,20 @@ class TableCreateCollectionSerializer(serializers.Serializer):
     table_count = serializers.IntegerField(min_value=1, required=True)
 
 
+class ProductOrderSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True)
+
+    class Meta:
+        model = ProductOrder
+        fields = ['product', 'product_name', 'quantity']
+
+
 class OrderCreateSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
-    product_ids = serializers.CharField(write_only=True)
-    table = serializers.IntegerField(write_only=True)
+    table_number = serializers.IntegerField(write_only=True)
+    table = TableSerializer(read_only=True)
+    product_orders = ProductOrderSerializer(many=True, write_only=True)
+    full_product_orders = ProductOrderSerializer(
+        many=True, read_only=True, source='product_orders')
 
     class Meta:
         model = Order
@@ -86,26 +97,27 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             'status',
             'total_price',
             'organization',
+            'table_number',
             'table',
             'type',
-            'products',
-            'product_ids'
+            'product_orders',
+            'full_product_orders',
         )
 
-    def validate_product_ids(self, value):
-        try:
-            ids = [int(i.strip())
-                   for i in value.split(',') if i.strip().isdigit()]
-            products = Product.objects.filter(id__in=ids)
-            if not products.exists():
-                raise serializers.ValidationError(
-                    "Hech qanday mahsulot topilmadi.")
-            return products
-        except Exception:
-            raise serializers.ValidationError(
-                "Mahsulotlar ro‘yxatini noto‘g‘ri formatda yubordingiz.")
+    # def validate_product_orders(self, value):
+    #     try:
+    #         ids = [int(i.strip())
+    #                for i in value.split(',') if i.strip().isdigit()]
+    #         products = Product.objects.filter(id__in=ids)
+    #         if not products.exists():
+    #             raise serializers.ValidationError(
+    #                 "Hech qanday mahsulot topilmadi.")
+    #         return products
+    #     except Exception:
+    #         raise serializers.ValidationError(
+    #             "Mahsulotlar ro‘yxatini noto‘g‘ri formatda yubordingiz.")
 
-    def validate_table(self, value):
+    def validate_table_number(self, value):
         organization = self.initial_data.get("organization")
 
         if not organization:
@@ -118,37 +130,20 @@ class OrderCreateSerializer(serializers.ModelSerializer):
                 f"{value} raqamli stol topilmadi yoki ushbu organizationga tegishli emas.")
 
     def create(self, validated_data):
-        products = validated_data.pop('product_ids')   # queryset
-        table_obj = validated_data.pop(
-            'table')         # bu endi Table instance
-        order = Order.objects.create(table=table_obj, **validated_data)
-        order.products.set(products)
-        return order
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
-    product_ids = serializers.PrimaryKeyRelatedField(
-        queryset=Product.objects.all(),
-        many=True,
-        write_only=True,
-        source='products'
-    )
-
-    class Meta:
-        model = Order
-        fields = (
-            'id',
-            'created_at',
-            'updated_at',
-            'status',
-            'total_price',
-            'organization',
-            'table',
-            'type',
-            'products',
-            'product_ids'
+        table_number = validated_data.pop('table_number')
+        organization = validated_data.pop('organization')
+        table_obj = Table.objects.filter(
+            number=table_number, organization=organization).first()
+        product_orders_data = validated_data.pop('product_orders')
+        order = Order.objects.create(
+            table=table_obj,
+            organization=organization,
+            **validated_data
         )
+        for po_data in product_orders_data:
+            ProductOrder.objects.create(order=order, **po_data)
+
+        return order
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
