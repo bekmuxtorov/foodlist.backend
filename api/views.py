@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 
+from bot.bot import send_confirmation_message_to_user
 from .utils import create_qr_code_for_tables, safe_filename
-from .swagger_docs import table_create_schema, table_in_organization
+from .swagger_docs import table_create_schema, table_in_organization, cheking_phone_number
 from api.serializers import (
     CurrencySerializer,
     WiFiSerializer,
@@ -16,6 +17,7 @@ from api.serializers import (
     TableCreateCollectionSerializer,
     OrderCreateSerializer,
     UserCreateSerializer,
+    PhoneCheckSerializer,
 )
 from eateries.models import (
     Currency,
@@ -312,3 +314,23 @@ class UserCreateAPIView(CreateAPIView):
 class UserDetailAPIView(RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserCreateSerializer
+
+
+class PhoneCheckAPIView(APIView):
+    def get_queryset(self):
+        return UserProfile.objects.all()
+
+    @cheking_phone_number
+    def post(self, request):
+        serializer = PhoneCheckSerializer(data=request.data)
+        if serializer.is_valid():
+            phone_number = serializer.validated_data["phone_number"]
+            user = UserProfile.objects.filter(
+                phone_number=phone_number
+            ).first()
+            if user:
+                send_confirmation_message_to_user(user_id=user.telegram_id)
+                return Response({"exists": True, "has_confirmation_message_been_sent": True})
+            else:
+                return Response({"exists": False, "has_confirmation_message_been_sent": False})
+        return Response(serializer.errors, status=400)

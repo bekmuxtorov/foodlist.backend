@@ -42,3 +42,32 @@ table_in_organization = swagger_auto_schema(
         )
     ]
 )
+
+
+cheking_phone_number = swagger_auto_schema(
+    operation_description="Send a confirmation message to the telegram bot with the phone number",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'phone_number': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Phone number',
+                example='+998901234567'
+            )
+        },
+        required=['phone_number',]
+    ),
+    responses={
+        200: openapi.Response(
+            description="This checks whether a user matching the phone number exists and returns a status of sending a confirmation message.",
+            examples={
+                'application/json': {
+                    "exists": True,
+                    "has_confirmation_message_been_sent": True
+                }
+            }
+        ),
+        400: openapi.Response(description="Invalid data"),
+        404: openapi.Response(description="phone_number not found"),
+    }
+)

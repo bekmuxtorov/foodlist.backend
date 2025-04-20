@@ -1,3 +1,5 @@
+from django.utils import timezone
+from datetime import timedelta, datetime
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.core.validators import RegexValidator
@@ -63,6 +65,25 @@ class UserProfile(BaseModel):
         blank=True,
         null=True
     )
+    auth_token = models.CharField(
+        max_length=255,
+        verbose_name='Auth Token',
+        blank=True,
+        null=True
+    )
+    token_expiry = models.DateTimeField(
+        verbose_name="Token Expiry",
+        blank=True,
+        null=True
+    )
+
+    def set_token_expiry(self, hours):
+        self.token_expiry = timezone.now() + timedelta(hours=hours)
+
+    def is_token_valid(self):
+        if self.token_expiry and self.token_expiry > timezone.now():
+            return True
+        return False
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
@@ -377,7 +398,7 @@ class Order(BaseModel):
     class Meta:
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
-    
+
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(

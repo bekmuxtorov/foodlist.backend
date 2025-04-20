@@ -36,6 +36,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 LOCAL_APPS = [
     "eateries",
+    "bot",
 ]
 
 INSTALLED_APPS = [
@@ -183,3 +184,7 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT')
 CORS_ALLOW_HEADERS = ('accept', 'authorization', 'content-type',
                       'user-agent', 'x-csrftoken', 'x-requested-with')
+
+TELEGRAM_BOT_TOKEN = env.str('TELEGRAM_BOT_TOKEN')
+JWT_ALGORITHM = env.str('JWT_ALGORITHM')
+TOKEN_VALIDITY_PERIOD = 24  # h

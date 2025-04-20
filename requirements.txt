@@ -7,3 +7,4 @@ django-filter==25.1
 Pillow==9.5.0
 django-cors-headers==4.2.0
 qrcode==8.1
+python-telegram-bot==13.15

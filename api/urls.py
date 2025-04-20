@@ -28,6 +28,7 @@ from api.views import (
     OrganizationCategoryListAPIView,
     UserCreateAPIView,
     UserDetailAPIView,
+    PhoneCheckAPIView,
 )
 
 urlpatterns = [
@@ -156,5 +157,9 @@ urlpatterns = [
     path(
         "users/<int:pk>/",
         UserDetailAPIView.as_view()
+    ),
+    path(
+        "users/confirmation/",
+        PhoneCheckAPIView.as_view()
     )
 ]

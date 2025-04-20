@@ -160,6 +160,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "phone_number",
             "full_name",
             "type",
+            "auth_token",
+            "token_expiry",
             "is_active",
             "created_at",
             "updated_at",
@@ -168,6 +170,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "id",
             "full_name",
             "type",
+            "auth_token",
+            "token_expiry",
             "is_active",
             "created_at",
             "updated_at",
@@ -203,3 +207,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
         Telefon raqamidan foydalanib, full_name generatsiya qiladi.
         """
         return f"User {phone_number[-4:]}"
+
+
+class PhoneCheckSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=13)
+
+    def validate_phone_number(self, value):
+        phone_number = value.replace("+", "")
+        if not phone_number.isdigit():
+            raise serializers.ValidationError(
+                "Telefon raqami faqat raqamlardan iborat bo'lishi kerak.")
+        if len(phone_number) != 12:
+            raise serializers.ValidationError(
+                "Telefon raqami 13 ta raqamdan iborat bo'lishi kerak.")
+        return value

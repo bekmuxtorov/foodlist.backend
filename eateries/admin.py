@@ -123,9 +123,9 @@ class UserProfileForm(forms.ModelForm):
 class UserProfileAdmin(admin.ModelAdmin):
     form = UserProfileForm
     list_display = ('full_name', 'id', 'phone_number',
-                    'created_at', 'updated_at')
+                    'created_at', 'updated_at', 'token_expiry')
     search_fields = ('full_name', 'phone_number')
     list_filter = ('created_at', 'updated_at', 'type')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
-    readonly_fields = ('password', 'created_at', 'updated_at')
+    readonly_fields = ('password', 'created_at', 'updated_at', 'token_expiry')
