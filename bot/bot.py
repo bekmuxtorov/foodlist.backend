@@ -46,7 +46,7 @@ def phone_number(update: Update, context: CallbackContext) -> None:
     phone_number = update.message.contact.phone_number
 
     user_profile = models.UserProfile.objects.filter(
-        phone_number=phone_number).first()
+        telegram_id=user.id).first()
     if user_profile:
         update.message.reply_text(
             f"🎉 Xush kelibsiz, {user.first_name} 🎉\n\n✅ Siz allaqachon ro'yxatdan o'tgansiz"
@@ -55,12 +55,14 @@ def phone_number(update: Update, context: CallbackContext) -> None:
 
     try:
         TOKEN_VALIDITY_PERIOD = settings.TOKEN_VALIDITY_PERIOD
-        new_user = models.UserProfile.objects.create(
-            full_name=user.full_name,
-            phone_number=phone_number,
-            telegram_id=user.id,
-            is_active=True
-        )
+        new_user = models.UserProfile.objects.filter(
+            phone_number=phone_number
+        ).first()
+        new_user.full_name = user.full_name
+        new_user.phone_number = phone_number
+        new_user.telegram_id = user.id
+        new_user.is_active = True
+
         new_user.auth_token = create_jwt_token(
             user=new_user,
             hours=TOKEN_VALIDITY_PERIOD

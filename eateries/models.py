@@ -91,8 +91,8 @@ class UserProfile(BaseModel):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-    def __str__(self) -> str:
-        return " | ".join([self.full_name, self.phone_number])
+    # def __str__(self) -> str:
+    #     return " | ".join([self.id, self.phone_number])
 
     objects = UserManager()
 

@@ -325,12 +325,12 @@ class PhoneCheckAPIView(APIView):
         serializer = PhoneCheckSerializer(data=request.data)
         if serializer.is_valid():
             phone_number = serializer.validated_data["phone_number"]
-            user = UserProfile.objects.filter(
+            user, created = UserProfile.objects.get_or_create(
                 phone_number=phone_number
-            ).first()
-            if user:
+            )
+            if not created:
                 send_confirmation_message_to_user(user_id=user.telegram_id)
-                return Response({"exists": True, "has_confirmation_message_been_sent": True})
+                return Response({"user_id": user.id, "exists": True, "has_confirmation_message_been_sent": True})
             else:
-                return Response({"exists": False, "has_confirmation_message_been_sent": False})
+                return Response({"user_id": user.id, "exists": False, "has_confirmation_message_been_sent": False})
         return Response(serializer.errors, status=400)
