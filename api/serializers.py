@@ -163,6 +163,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "auth_token",
             "token_expiry",
             "is_active",
+            "telegram_id",
             "created_at",
             "updated_at",
         )
@@ -173,6 +174,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "auth_token",
             "token_expiry",
             "is_active",
+            "telegram_id",
             "created_at",
             "updated_at",
         )
