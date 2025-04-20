@@ -260,7 +260,7 @@ class OrderCreateAPIView(CreateAPIView):
 
 class OrderListAPIView(ListAPIView):
     serializer_class = OrderCreateSerializer
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('-created_at')
     filterset_fields = ("organization", "table", "status", "type", "user")
     search_fields = ("organization__short_name", "table__number")
 

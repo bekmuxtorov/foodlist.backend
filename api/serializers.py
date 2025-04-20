@@ -74,10 +74,16 @@ class TableCreateCollectionSerializer(serializers.Serializer):
 
 class ProductOrderSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
+    category = CategorySerializer(source='product.category', read_only=True)
+    images = ProductImageSerializer(
+        source='product.images', many=True, read_only=True)
+    price = serializers.DecimalField(
+        source='product.price', max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:
         model = ProductOrder
-        fields = ['product', 'product_name', 'quantity']
+        fields = ['product', 'product_name',
+                  'category', 'images', 'price', 'quantity']
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
