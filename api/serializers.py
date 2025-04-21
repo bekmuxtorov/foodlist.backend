@@ -92,12 +92,15 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     product_orders = ProductOrderSerializer(many=True, write_only=True)
     full_product_orders = ProductOrderSerializer(
         many=True, read_only=True, source='product_orders')
+    phone_number = serializers.CharField(
+        source='user.phone_number', read_only=True)
 
     class Meta:
         model = Order
         fields = (
             'id',
             'user',
+            'phone_number',
             'created_at',
             'updated_at',
             'status',
