@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_name %}Tashkilot{% endblock %}
+
+{% block content %}
+<section class="section main-section">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+                    Ma'lumotlar
+                </p>
+            </header>
+            <div class="card-content">
+                <form>
+                    <!-- <div class="field">
+              <label class="label">Avatar</label>
+              <div class="field-body">
+                <div class="field file">
+                  <label class="upload control">
+                    <a class="button blue">
+                      Upload
+                    </a>
+                    <input type="file">
+                  </label>
+                </div>
+              </div>
+            </div> -->
+                    <div class="field">
+                        <label class="label">Nomi</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="on" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help">To'ldirilishi shart.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Qisqa nomi</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="on" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help">To'ldirilishi shart. Bu nom keyinchalik meyudagi qr kodida aks etadi.
+                                    Bir so'zdan
+                                    iborat bo'lishi kerak.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Telefon raqam</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="off" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Manzil</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="off" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Batafsil ma'lumot</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <textarea type="text" autocomplete="on" name="name" class="input"
+                                        style="height: 100px;"></textarea>
+                                </div>
+                                <p class="help"></p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account"></i></span>
+                    Profile
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="w-48 h-48 mx-auto relative">
+                    <!-- Background image -->
+                    <div class="absolute inset-0 bg-center bg-cover"
+                        style="background-image: url('/img/background.jpg'); z-index: 1;"></div>
+
+                    <!-- Logo -->
+                    <img src="/img/logo.png" alt="John Doe"
+                        class="absolute inset-0 m-auto rounded-full w-24 h-24 object-contain z-10" />
+                </div>
+                <!-- <div class="image w-48 h-48 mx-auto relative overflow-hidden bg-center bg-cover"
+            style="background-image: url('/img/background.jpg');">
+            <img src="/img/logo.png" alt="John Doe" class="rounded-full w-full h-full object-cover opacity-90">
+          </div> -->
+                <hr>
+                <div class="field">
+                    <div class="field-body">
+                        <div class="field file">
+                            <label class="upload control"
+                                style="display: flex; align-items: center; width: 100%;justify-content: space-between;">
+                                <div>
+                                    <a class="button blue">
+                                        Logotip yuklash
+                                    </a>
+                                    <input type="file">
+                                </div>
+                                <div>
+                                    <a class="button blue">
+                                        Muqova yuklash
+                                    </a>
+                                    <input type="file">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="field">
+                    <label class="label">Valyuta</label>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <select autocomplete="off" name="name" value="" class="input">
+                                    <option>UZS - O'zbek so'mi</option>
+                                    <option>USD - Amerika dollari</option>
+                                </select>
+                            </div>
+                            <p class="help"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Xizmat haqi</label>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input type="number" autocomplete="off" name="name" value="" class="input">
+                            </div>
+                            <p class="help">To'ldirish shart. Bu yerdagi qiymat foiz(%)da bo'lib, sizning tashkilotingiz
+                                xizmat
+                                ko'rsatish foizi hisoblanadi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control" style="text-align: end;">
+                        <button type="submit" class="button green">
+                            Ma'lumotlarni saqlash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+                    Wifi ma'lumotlari
+                </p>
+            </header>
+            <div class="card-content">
+                <form>
+                    <div class="field">
+                        <label class="label">Nomi</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="off" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help">To'ldirilishi shart.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" autocomplete="off" name="name" value="" class="input" required>
+                                </div>
+                                <p class="help">To'ldirilishi shart.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control" style="text-align: end;">
+                            <button type="submit" class="button green">
+                                Saqlash
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <span class="icon"><i class="mdi mdi-account"></i></span>
+            Profile
+          </p>
+        </header>
+        <div class="card-content">
+          <div class="image w-48 h-48 mx-auto relative overflow-hidden bg-center bg-cover"
+            style="background-image: url('/img/background.jpg');">
+            <img src="/img/logo.png" alt="John Doe" class="rounded-full w-full h-full object-cover opacity-90">
+          </div>
+          <hr>
+          <div class="field">
+            <div class="field-body">
+              <div class="field file">
+                <label class="upload control"
+                  style="display: flex; align-items: center; width: 100%;justify-content: space-between;">
+                  <div>
+                    <a class="button blue">
+                      Logotip yuklash
+                    </a>
+                    <input type="file">
+                  </div>
+                  <div>
+                    <a class="button blue">
+                      Muqova yuklash
+                    </a>
+                    <input type="file">
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="field">
+            <label class="label">Valyuta</label>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <select autocomplete="off" name="name" value="" class="input">
+                    <option>UZS - O'zbek so'mi</option>
+                    <option>USD - Amerika dollari</option>
+                  </select>
+                </div>
+                <p class="help"></p>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Xizmat haqi</label>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input type="number" autocomplete="off" name="name" value="" class="input">
+                </div>
+                <p class="help">To'ldirish shart. Bu yerdagi qiymat foiz(%)da bo'lib, sizning tashkilotingiz xizmat
+                  ko'rsatish foizi hisoblanadi.</p>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control" style="text-align: end;">
+              <button type="submit" class="button green">
+                Ma'lumotlarni saqlash
+              </button>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+
+</section>
+{% endblock content %}

@@ -9,7 +9,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from api.views import TableInOrganization
-
+from web import urls as web_urls
 schema_view = get_schema_view(
     openapi.Info(
         title="foodlist.menu API",
@@ -42,5 +42,7 @@ urlpatterns = [
         TableInOrganization.as_view(),
     ),
 ]
+
+urlpatterns += web_urls.urlpatterns
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
