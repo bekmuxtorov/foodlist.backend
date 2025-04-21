@@ -209,6 +209,18 @@ class Organization(BaseModel):
         blank=True,
         null=True
     )
+    working_days = models.CharField(
+        max_length=255,
+        verbose_name='Working days',
+        blank=True,
+        null=True
+    )
+    working_hours = models.CharField(
+        max_length=255,
+        verbose_name='Working hours',
+        blank=True,
+        null=True
+    )
 
     def __str__(self) -> str:
         return " | ".join([self.short_name, self.phone_number])
