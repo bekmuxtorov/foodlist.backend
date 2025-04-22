@@ -257,7 +257,6 @@ class TableInOrganization(APIView):
 class OrderCreateAPIView(CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderCreateSerializer
-    permission_classes = [AllowAny]
 
 
 class OrderListAPIView(ListAPIView):
@@ -317,6 +316,8 @@ class UserDetailAPIView(RetrieveAPIView):
 
 
 class PhoneCheckAPIView(APIView):
+    permission_classes = [AllowAny]
+
     def get_queryset(self):
         return UserProfile.objects.all()
 
