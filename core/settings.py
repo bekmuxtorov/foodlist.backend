@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 from environs import Env
 
@@ -165,7 +166,10 @@ JAZZMIN_SETTINGS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'api.authentication.CustomJWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -186,5 +190,21 @@ CORS_ALLOW_HEADERS = ('accept', 'authorization', 'content-type',
                       'user-agent', 'x-csrftoken', 'x-requested-with')
 
 TELEGRAM_BOT_TOKEN = env.str('TELEGRAM_BOT_TOKEN')
-JWT_ALGORITHM = env.str('JWT_ALGORITHM')
-TOKEN_VALIDITY_PERIOD = 24  # h
+TOKEN_VALIDITY_PERIOD = env.int('TOKEN_VALIDITY_PERIOD')  # h
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+}
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=TOKEN_VALIDITY_PERIOD),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
