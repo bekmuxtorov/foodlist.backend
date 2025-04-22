@@ -55,18 +55,16 @@ def phone_number(update: Update, context: CallbackContext) -> None:
 
     try:
         TOKEN_VALIDITY_PERIOD = settings.TOKEN_VALIDITY_PERIOD
-        new_user = models.UserProfile.objects.filter(
+        new_user, _ = models.UserProfile.objects.get_or_create(
             phone_number=phone_number
-        ).first()
-        new_user.full_name = user.full_name
+        )
+        new_user.full_name = user.first_name
         new_user.phone_number = phone_number
         new_user.telegram_id = user.id
         new_user.is_active = True
+        new_user.is_authenticated = True
 
-        new_user.auth_token = create_jwt_token(
-            user=new_user,
-            hours=TOKEN_VALIDITY_PERIOD
-        )
+        new_user.auth_token = create_jwt_token(user=new_user)
         new_user.set_token_expiry(hours=TOKEN_VALIDITY_PERIOD)
         new_user.save()
         update.message.reply_text(
@@ -124,10 +122,8 @@ def keyboards_handle_message(update: Update, context: CallbackContext):
         )
         if not user_profile.is_token_valid():
             user_profile.is_active = True
-            user_profile.auth_token = create_jwt_token(
-                user=user_profile,
-                hours=TOKEN_VALIDITY_PERIOD
-            )
+            user_profile.is_authenticated = True
+            user_profile.auth_token = create_jwt_token(user=user_profile)
             user_profile.set_token_expiry(TOKEN_VALIDITY_PERIOD)
             user_profile.save()
 
