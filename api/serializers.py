@@ -52,12 +52,24 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    category_detail = CategorySerializer(read_only=True, source='category')
     images = ProductImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = [
+            'id',
+            'organization',
+            'name',
+            'description',
+            'weight',
+            'price',
+            'images',
+            'category',
+            'category_detail',
+            'is_active',
+        ]
+        read_only_fields = ('category_detail', 'images')
 
 
 class TableSerializer(serializers.ModelSerializer):
