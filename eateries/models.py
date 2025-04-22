@@ -54,6 +54,10 @@ class UserProfile(BaseModel):
         default=False,
         verbose_name='Is active'
     )
+    is_authenticated = models.BooleanField(
+        default=False,
+        verbose_name='is authenticated'
+    )
     sms_code = models.CharField(
         max_length=6,
         verbose_name='SMS code',
