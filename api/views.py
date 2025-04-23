@@ -81,7 +81,6 @@ class OrganizationRetrieveAPIView(RetrieveAPIView):
 class OrganizationUpdateAPIView(UpdateAPIView):
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
@@ -125,7 +124,6 @@ class ProductDetailAPIView(RetrieveAPIView):
 class ProductUpdateAPIView(UpdateAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
