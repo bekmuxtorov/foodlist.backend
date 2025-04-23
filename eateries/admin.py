@@ -89,6 +89,7 @@ class ProductOrder(admin.TabularInline):
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
+        "id",
         "organization",
         "table",
         "status",
