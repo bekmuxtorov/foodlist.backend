@@ -186,6 +186,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://osonmenyu-admin.netlify.app",
 ]
 
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT')
 CORS_ALLOW_HEADERS = ('accept', 'authorization', 'content-type',
                       'user-agent', 'x-csrftoken', 'x-requested-with')
