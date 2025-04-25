@@ -125,6 +125,13 @@ class Currency(BaseModel):
 
 
 class WiFi(BaseModel):
+    organization = models.ForeignKey(
+        to='Organization',
+        on_delete=models.CASCADE,
+        related_name="wifi",
+        blank=True,
+        null=True
+    )
     name = models.CharField(
         max_length=255,
         verbose_name='Name'
@@ -188,14 +195,6 @@ class Organization(BaseModel):
     address = models.CharField(
         max_length=255,
         verbose_name='Address'
-    )
-    wifi_password = models.ForeignKey(
-        to=WiFi,
-        on_delete=models.CASCADE,
-        verbose_name='Wi-Fi password',
-        related_name='organizations',
-        blank=True,
-        null=True
     )
     wallpaper = models.ImageField(
         upload_to="wallpapers/",

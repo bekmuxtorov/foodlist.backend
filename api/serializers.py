@@ -27,17 +27,46 @@ class WiFiSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WiFi
-        fields = ("id", "name", "password", "qr_code")
+        fields = "__all__"
+
+
+class WiFiSerializerForOrganization(serializers.ModelSerializer):
+    class Meta:
+        model = WiFi
+        fields = ('id', 'name', 'password')
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
-    currency_detail = CurrencySerializer(source='currency', read_only=True)
-    wifi_password_detail = WiFiSerializer(
-        source='wifi_password', read_only=True)
+    currency_detail = serializers.SerializerMethodField()
+    wifi_passwords = WiFiSerializerForOrganization(many=True, write_only=True)
+    wifi_passwords_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = Organization
         fields = "__all__"
+        extra_kwargs = {
+            'currency': {'write_only': True}
+        }
+
+    def get_currency_detail(self, obj):
+        if obj.currency_id is None:
+            return None
+        return CurrencySerializer(obj.currency).data
+
+    def get_wifi_passwords_detail(self, obj):
+        wifi_qs = getattr(obj, 'wifi', None)
+        if wifi_qs is None:
+            return []
+        return WiFiSerializerForOrganization(wifi_qs.all(), many=True).data
+
+    def create(self, validated_data):
+        wifi_data = validated_data.pop('wifi_passwords', [])
+        organization = super().create(validated_data)
+        WiFi.objects.bulk_create([
+            WiFi(organization=organization, **wifi)
+            for wifi in wifi_data
+        ])
+        return organization
 
 
 class CategorySerializer(serializers.ModelSerializer):

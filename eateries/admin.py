@@ -16,12 +16,18 @@ class CurrencyAdmin(admin.ModelAdmin):
 
 @admin.register(models.WiFi)
 class WiFiAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id', 'password', 'created_at', 'updated_at')
-    search_fields = ('name', 'password')
-    list_filter = ('created_at', 'updated_at')
+    list_display = ('name', 'id', 'organization',
+                    'password', 'created_at', 'updated_at')
+    search_fields = ('name', 'password', 'organization')
+    list_filter = ('created_at', 'updated_at', 'organization')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+
+
+class WiFiTabular(admin.TabularInline):
+    model = models.WiFi
+    extra = 1
 
 
 @admin.register(models.Organization)
@@ -32,6 +38,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+    inlines = [WiFiTabular]
 
 
 @admin.register(models.Category)

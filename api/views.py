@@ -74,7 +74,6 @@ class WiFiDestroyAPIView(DestroyAPIView):
 class OrganizationCreateAPIView(CreateAPIView):
     serializer_class = OrganizationSerializer
     queryset = Organization.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
 
 
 class OrganizationRetrieveAPIView(RetrieveAPIView):
