@@ -71,3 +71,31 @@ cheking_phone_number = swagger_auto_schema(
         404: openapi.Response(description="phone_number not found"),
     }
 )
+
+checking_token = swagger_auto_schema(
+    operation_description="Checking token",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'token': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description='Token',
+                example='asdfasdfasdfadfasdfasdfasdfasdf'
+            )
+        },
+        required=['token',]
+    ),
+    responses={
+        200: openapi.Response(
+            description="This checks whether a user matching the token exists and returns a status of sending a confirmation message.",
+            examples={
+                'application/json': {
+                    "user_id": 36,
+                    "is_valid": True
+                }
+            }
+        ),
+        400: openapi.Response(description="Invalid data"),
+        404: openapi.Response(description="token not found"),
+    }
+)

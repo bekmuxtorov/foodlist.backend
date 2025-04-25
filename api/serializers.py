@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.utils import timezone
 from eateries.models import (
     Currency,
     WiFi,
@@ -237,4 +238,22 @@ class PhoneCheckSerializer(serializers.Serializer):
         if len(phone_number) != 12:
             raise serializers.ValidationError(
                 "Telefon raqami 13 ta raqamdan iborat bo'lishi kerak.")
+        return value
+
+
+class CheckTokenSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=255)
+
+    def validate_token(self, value):
+        try:
+            user = UserProfile.objects.get(auth_token=value)
+        except UserProfile.DoesNotExist:
+            raise serializers.ValidationError(
+                "Token noto'g'ri yoki mavjud emas.")
+
+        if user.token_expiry < timezone.now():
+            raise serializers.ValidationError("Token muddati o'tgan.")
+
+        # foydalanuvchini kontekstda saqlab qolamiz
+        self.context['user'] = user
         return value

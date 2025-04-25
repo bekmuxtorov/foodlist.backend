@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import status
 
 from bot.bot import send_confirmation_message_to_user
 from .utils import create_qr_code_for_tables, safe_filename
@@ -18,6 +19,7 @@ from api.serializers import (
     OrderCreateSerializer,
     UserCreateSerializer,
     PhoneCheckSerializer,
+    CheckTokenSerializer,
 )
 from eateries.models import (
     Currency,
@@ -333,3 +335,21 @@ class PhoneCheckAPIView(APIView):
             else:
                 return Response({"user_id": user.id, "exists": False, "has_confirmation_message_been_sent": False})
         return Response(serializer.errors, status=400)
+
+
+class CheckTokenAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = CheckTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.context['user']
+            return Response({
+                "is_valid": True,
+                "user_id": user.id
+            }, status=status.HTTP_200_OK)
+
+        return Response({
+            "is_valid": False,
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
