@@ -99,3 +99,16 @@ checking_token = swagger_auto_schema(
         404: openapi.Response(description="token not found"),
     }
 )
+
+filter_for_table = swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'organization', openapi.IN_QUERY,
+                description="Tashkilot ID", type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'search', openapi.IN_QUERY,
+                description="Stol raqami bo‘yicha qidirish", type=openapi.TYPE_STRING
+            ),
+        ]
+    )

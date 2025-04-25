@@ -1,3 +1,4 @@
+from rest_framework import filters
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,9 +6,11 @@ from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, D
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from bot.bot import send_confirmation_message_to_user
 from .utils import create_qr_code_for_tables, safe_filename
-from .swagger_docs import table_create_schema, table_in_organization, cheking_phone_number
+from .swagger_docs import table_create_schema, table_in_organization, cheking_phone_number, filter_for_table
 from api.serializers import (
     CurrencySerializer,
     WiFiSerializer,
@@ -113,6 +116,7 @@ class ProductListAPIView(ListAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     parser_classes = (MultiPartParser, FormParser)
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ("organization", "category")
     search_fields = ("name", "description")
 
@@ -188,8 +192,13 @@ class TableListAPIView(ListAPIView):
     serializer_class = TableSerializer
     queryset = Table.objects.all()
     parser_classes = (MultiPartParser, FormParser)
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ("organization",)
     search_fields = ("number",)
+
+    @filter_for_table
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class TableDetailAPIView(RetrieveAPIView):
