@@ -115,7 +115,7 @@ class CategoryRetrieveAPIView(RetrieveAPIView):
 class ProductCreateAPIView(CreateAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-    parser_classes = (MultiPartParser, FormParser)
+    # parser_classes = (MultiPartParser, FormParser)
 
 
 class ProductListAPIView(ListAPIView):

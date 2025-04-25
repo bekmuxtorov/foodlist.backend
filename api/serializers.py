@@ -76,14 +76,17 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
+
     class Meta:
         model = ProductImage
         fields = ['image', ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_detail = CategorySerializer(read_only=True, source='category')
-    images = ProductImageSerializer(many=True, read_only=True)
+    category_detail = serializers.SerializerMethodField(read_only=True)
+    images_detail = serializers.SerializerMethodField(read_only=True)
+    images = ProductImageSerializer(many=True, write_only=True, required=False)
 
     class Meta:
         model = Product
@@ -96,10 +99,37 @@ class ProductSerializer(serializers.ModelSerializer):
             'price',
             'images',
             'category',
-            'category_detail',
             'is_active',
+            'category_detail',
+            'images_detail'
         ]
-        read_only_fields = ('category_detail', 'images')
+        extra_kwargs = {
+            'category': {'write_only': True}
+        }
+        read_only_fields = ('category_detail', 'images_detail')
+
+    def get_category_detail(self, obj):
+        if obj.category_id is None:
+            return None
+        return CategorySerializer(obj.category).data
+
+    def get_images_detail(self, obj):
+        images_qs = getattr(obj, 'images', None)
+        if images_qs is None:
+            return []
+        return ProductImageSerializer(obj.images.all(), many=True).data
+
+    def create(self, validated_data):
+        images_data = validated_data.pop('images', [])
+        product = super().create(validated_data)
+
+        if images_data:
+            ProductImage.objects.bulk_create([
+                ProductImage(product=product, image=image_data['image'])
+                for image_data in images_data
+            ])
+
+        return product
 
 
 class TableSerializer(serializers.ModelSerializer):
