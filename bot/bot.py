@@ -120,12 +120,14 @@ def keyboards_handle_message(update: Update, context: CallbackContext):
             "✅ Siz loginingizni muvaffaqiyatli tasdiqladingiz!\n\nEndi siz saytga kirishingiz va ishlashni davom ettirishingiz mumkin.\nXizmatimizdan foydalanganingiz uchun tashakkur!",
             reply_markup=ReplyKeyboardRemove()
         )
+        user_profile.is_active = True
+        user_profile.is_authenticated = True
+
         if not user_profile.is_token_valid():
-            user_profile.is_active = True
-            user_profile.is_authenticated = True
             user_profile.auth_token = create_jwt_token(user=user_profile)
             user_profile.set_token_expiry(TOKEN_VALIDITY_PERIOD)
-            user_profile.save()
+
+        user_profile.save()
 
     elif user_response == "🚫Bekor qilish":
         update.message.reply_text(

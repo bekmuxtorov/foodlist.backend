@@ -252,6 +252,8 @@ class CheckTokenSerializer(serializers.Serializer):
                 "Token noto'g'ri yoki mavjud emas.")
 
         if user.token_expiry < timezone.now():
+            user.is_active = False
+            user.save()
             raise serializers.ValidationError("Token muddati o'tgan.")
 
         # foydalanuvchini kontekstda saqlab qolamiz
