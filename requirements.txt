@@ -10,3 +10,4 @@ qrcode==8.1
 python-telegram-bot==13.15
 PyJWT==2.8.0
 djangorestframework-simplejwt==5.2.2
+psycopg2==2.9.7
