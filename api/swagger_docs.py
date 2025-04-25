@@ -112,3 +112,12 @@ filter_for_table = swagger_auto_schema(
             ),
         ]
     )
+
+filter_for_wifi = swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                'organization', openapi.IN_QUERY,
+                description="Tashkilot ID", type=openapi.TYPE_INTEGER
+            ),
+        ]
+    )
