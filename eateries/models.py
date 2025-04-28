@@ -36,7 +36,7 @@ class UserProfile(BaseModel):
         verbose_name='Phone number',
         validators=[
             RegexValidator(
-                regex=r'^\+?\d{1,4}[\s-]?\(?\d{1,4}\)?[\s-]?\d{1,12}([\s-]?\d{1,12})?$',
+                regex=r'^\+998\d{9}$',
                 message=(
                     "Invalid phone number."
                 )
