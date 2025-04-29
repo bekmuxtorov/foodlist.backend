@@ -10,7 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from bot.bot import send_confirmation_message_to_user
 from .utils import create_qr_code_for_tables, safe_filename
-from .swagger_docs import table_create_schema, table_in_organization, cheking_phone_number, filter_for_table, filter_for_wifi
+from .swagger_docs import table_create_schema, table_in_organization, cheking_phone_number, filter_for_table, filter_for_wifi, checking_token
 from api.serializers import (
     CurrencySerializer,
     WiFiSerializer,
@@ -355,6 +355,7 @@ class PhoneCheckAPIView(APIView):
 class CheckTokenAPIView(APIView):
     permission_classes = [AllowAny]
 
+    @checking_token
     def post(self, request):
         serializer = CheckTokenSerializer(data=request.data)
         if serializer.is_valid():
